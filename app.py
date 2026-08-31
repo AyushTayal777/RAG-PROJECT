@@ -14,7 +14,7 @@ from datetime import datetime
 import streamlit as st
 from dotenv import load_dotenv
 
-from utils.audio_processor import process_input
+from utils.audio_processor import get_youtube_transcript, convert_to_wav, chunk_audio
 from core.transcriber import transcribe_all
 from core.summarize import summary, generate_title
 from core.extractor import extract_action_items, extract_key_decisions, extract_questions
@@ -387,7 +387,13 @@ if run_clicked:
         try:
             with st.status("Running the pipeline…", expanded=True) as status:
                 status.write("📥  Ingesting source & chunking audio…")
-                chunks = process_input(source)
+
+                if mode == "YouTube URL":
+                    chunks = get_youtube_transcript(source)
+
+                else:
+                    wav_path = convert_to_wav(source)
+                    chunks = chunk_audio(wav_path)
 
                 status.write("🎙️  Transcribing…")
                 transcript = transcribe_all(chunks)
