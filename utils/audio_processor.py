@@ -9,10 +9,9 @@ def download_youtube_audio(url: str) -> str:
     output_path = os.path.join(DOWNLOAD_DIR, "%(id)s.%(ext)s")
 
     ydl_opts = {
-        # Prefer the widely available combined format.
-        # FFmpeg will extract the audio afterward.
-        "format": "ba/b",
+        "format": "bestaudio/best",
         "outtmpl": output_path,
+        "noplaylist": True,
 
         "postprocessors": [
             {
@@ -22,8 +21,17 @@ def download_youtube_audio(url: str) -> str:
             }
         ],
 
+        # Helps with YouTube blocking
+        "http_headers": {
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/131.0.0.0 Safari/537.36"
+            ),
+        },
+
         "quiet": True,
-        "noplaylist": True,
+        "no_warnings": True,
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
