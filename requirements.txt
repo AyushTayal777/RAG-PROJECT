@@ -44,3 +44,5 @@ tqdm>=4.66.0                      # Progress bars
 requests>=2.32.0
 
 audioop-lts>=0.2.1
+
+yt-dlp>=2026.08.19
