@@ -5,11 +5,15 @@ import os
 DOWNLOAD_DIR='downloads'
 os.makedirs(DOWNLOAD_DIR,exist_ok=True)
 
-def download_youtube_audio(url:str)-> str:
-    output_path = os.path.join(DOWNLOAD_DIR, "%(title)s.%(ext)s")
+def download_youtube_audio(url: str) -> str:
+    output_path = os.path.join(DOWNLOAD_DIR, "%(id)s.%(ext)s")
+
     ydl_opts = {
-        "format": "bestaudio/best",
+        # Prefer the widely available combined format.
+        # FFmpeg will extract the audio afterward.
+        "format": "18",
         "outtmpl": output_path,
+
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -17,11 +21,17 @@ def download_youtube_audio(url:str)-> str:
                 "preferredquality": "192",
             }
         ],
+
         "quiet": True,
+        "noplaylist": True,
     }
+
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=True)
-        filename = ydl.prepare_filename(info).replace(".webm", ".wav").replace(".m4a", ".wav")
+
+        downloaded_file = ydl.prepare_filename(info)
+        filename = os.path.splitext(downloaded_file)[0] + ".wav"
+
     return filename
 
 
