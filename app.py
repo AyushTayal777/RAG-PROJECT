@@ -389,14 +389,15 @@ if run_clicked:
                 status.write("📥  Ingesting source & chunking audio…")
 
                 if mode == "YouTube URL":
-                    chunks = get_youtube_transcript(source)
+                    status.write("📥  Fetching YouTube transcript…")
+                    transcript = get_youtube_transcript(source)
 
                 else:
                     wav_path = convert_to_wav(source)
                     chunks = chunk_audio(wav_path)
 
-                status.write("🎙️  Transcribing…")
-                transcript = transcribe_all(chunks)
+                    status.write("🎙️  Transcribing…")
+                    transcript = transcribe_all(chunks)
 
                 status.write("🏷️  Naming the session…")
                 title = generate_title(transcript)
