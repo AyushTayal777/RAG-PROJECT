@@ -11,7 +11,7 @@ def download_youtube_audio(url: str) -> str:
     ydl_opts = {
         # Prefer the widely available combined format.
         # FFmpeg will extract the audio afterward.
-        "format": "18",
+        "format": "best",
         "outtmpl": output_path,
 
         "postprocessors": [
